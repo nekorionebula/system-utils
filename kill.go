@@ -29,7 +29,7 @@ func getProcessID(processName string, duration float64) (int, error) {
 		fields := strings.Fields(line)
 		if len(fields) > 0 {
 			//Check if the first field (process name) is an exact match
-			if strings.EqualFold(fields[0], processName) {
+			if strings.EqualFold(fields[0], processName+".exe") {
 				//convert the second field (PID) to an integer
 				pid, pidErr := strconv.Atoi(fields[1])
 				if pidErr != nil {
