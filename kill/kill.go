@@ -1,4 +1,4 @@
-package main
+package kill
 
 import (
 	"bufio"
@@ -68,7 +68,7 @@ func kill(processName string, durationStr string) {
 	fmt.Printf("%v has been kiled\n", processName)
 }
 
-func main() {
+func RunKill() {
 	var (
 		processName string
 		durationStr string
