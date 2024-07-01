@@ -49,7 +49,12 @@ func getProcessID(processName string, duration float64) (int, error) {
 	return 0, fmt.Errorf("%v is not found", processName)
 }
 
-func kill(processName string, duration float64) {
+func kill(processName string, durationStr string) {
+	duration, parsErr := strconv.ParseFloat(durationStr, 64)
+	if parsErr != nil {
+		fmt.Println("invalid number format. please enter a valid number")
+		return
+	}
 	pid, err := getProcessID(processName, duration)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
@@ -66,7 +71,7 @@ func kill(processName string, duration float64) {
 func main() {
 	var (
 		processName string
-		duration    float64
+		durationStr string
 	)
 	fmt.Print("App name: ")
 	_, err := fmt.Scanf("%s\n", &processName)
@@ -75,7 +80,7 @@ func main() {
 		return
 	}
 	fmt.Print("The app will be terminated in (s): ")
-	_, err = fmt.Scanf("%f\n", &duration)
+	_, err = fmt.Scanf("%s\n", &durationStr)
 	if err != nil {
 		fmt.Println("Error :", err.Error())
 		return
@@ -86,5 +91,5 @@ func main() {
 	//} else {
 	//	fmt.Println("Process ID: ", pid)
 	//}
-	kill(processName, duration)
+	kill(processName, durationStr)
 }
