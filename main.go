@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/nekorionebula/system-utils/kill"
+	"github.com/nekorionebula/system-utils/internal/kill"
 )
 
 var (
