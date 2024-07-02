@@ -67,17 +67,14 @@ func kill(processName string, duration time.Duration) {
 		fmt.Println("Error:", err.Error())
 		return
 	}
-
-	killNow := func() {
-		time.Sleep(duration)
-		cmd := exec.Command("taskkill", "/F", "/T", "/PID", strconv.Itoa(pid))
-		if err = cmd.Run(); err != nil {
-			fmt.Println("Error:", err.Error())
-			return
-		}
-		fmt.Printf("%v has been kiled\n", processName)
+	time.Sleep(duration)
+	cmd := exec.Command("taskkill", "/F", "/T", "/PID", strconv.Itoa(pid))
+	if err = cmd.Run(); err != nil {
+		fmt.Println("Error:", err.Error())
+		return
 	}
-	go killNow()
+	fmt.Printf("%v has been kiled\n", processName)
+
 }
 
 func RunKill() {

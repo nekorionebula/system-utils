@@ -18,7 +18,7 @@ func Shutdown() {
 	for i := 0; i < maxAttempt; i++ {
 
 		fmt.Print("Enter time in seconds: ")
-		_, _ = fmt.Scan(&timeStr)
+		_, _ = fmt.Scanln(&timeStr)
 		time, errParse = strconv.Atoi(timeStr)
 
 		//error
@@ -27,7 +27,7 @@ func Shutdown() {
 			if i < maxAttempt-1 {
 				var retry string
 				fmt.Print("Do you want to retry? (y/n): ")
-				_, _ = fmt.Scan(&retry)
+				_, _ = fmt.Scanln(&retry)
 
 				if retry != "y" {
 					fmt.Println("Exiting...")

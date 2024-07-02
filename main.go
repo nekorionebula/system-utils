@@ -11,9 +11,7 @@ func main() {
 }
 
 var (
-	input    string
-	try      string
-	backHome string
+	input, try, backHome string
 )
 
 func Input() {
@@ -22,7 +20,10 @@ func Input() {
 		fmt.Printf("1. Kill App\n2. Shutdown\n")
 		fmt.Print("Task number: ")
 		//delete: catch err
-		_, _ = fmt.Scanf("%s\n", &input)
+		_, err := fmt.Scanf("%s\n", &input)
+		if err != nil {
+			fmt.Println("Error input:", err)
+		}
 		switch input {
 		case "1":
 			kill.RunKill()
@@ -37,18 +38,18 @@ func Input() {
 				fmt.Println("Exiting...")
 				return
 			} else {
-				Input()
+				continue
 			}
 		}
 
 		//toGoHome
 		fmt.Println(termstyle.Yellow, "\"Warning: If you want to kill the app, don't close the program or terminal\"", termstyle.Default)
 		fmt.Print("Back to home? (y/n): ")
-		_, _ = fmt.Scan(&backHome)
+		_, _ = fmt.Scanln(&backHome)
 		fmt.Println()
 		if backHome != "y" {
 			break
 		}
 	}
-	fmt.Println("Thank you :)")
+	fmt.Print("Thank you :)")
 }
