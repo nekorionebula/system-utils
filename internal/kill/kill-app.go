@@ -9,11 +9,25 @@ import (
 	"time"
 )
 
-func getSleepDuration(duration float64) interface{} {
-	return time.Duration(duration) * time.Second
+func GetSleepDuration(durationStr string) time.Duration {
+	for i := 0; i < 3; i++ {
+		fmt.Print("The app will be terminated in (s): ")
+		_, err := fmt.Scanf("%s\n", &durationStr)
+		if err != nil {
+			fmt.Println("Error :", err.Error())
+			break
+		}
+		duration, parsErr := strconv.ParseFloat(durationStr, 64)
+		if parsErr != nil {
+			fmt.Println("invalid number format. please enter a valid number")
+		} else {
+			return time.Duration(duration * float64(time.Second))
+		}
+	}
+	return 0
 }
 
-func getProcessID(processName string, duration float64) (int, error) {
+func getProcessID(processName string, duration time.Duration) (int, error) {
 	//Run "tasklist" command
 	cmd := exec.Command("tasklist")
 	output, err := cmd.Output()
@@ -36,9 +50,7 @@ func getProcessID(processName string, duration float64) (int, error) {
 					return 0, fmt.Errorf("failed to retriece %v id", pidErr.Error())
 				}
 				//Sleep Duration before return
-				fmt.Printf("%v will be terminated after %.2f minutes\n", processName, duration/60)
-				sleepDuration := getSleepDuration(duration)
-				time.Sleep(sleepDuration.(time.Duration))
+				fmt.Printf("%v will be terminated after %.2f minutes\n", processName, duration.Minutes())
 				return pid, nil
 			}
 		}
@@ -49,23 +61,23 @@ func getProcessID(processName string, duration float64) (int, error) {
 	return 0, fmt.Errorf("%v is not found", processName)
 }
 
-func kill(processName string, durationStr string) {
-	duration, parsErr := strconv.ParseFloat(durationStr, 64)
-	if parsErr != nil {
-		fmt.Println("invalid number format. please enter a valid number")
-		return
-	}
+func kill(processName string, duration time.Duration) {
 	pid, err := getProcessID(processName, duration)
 	if err != nil {
 		fmt.Println("Error:", err.Error())
 		return
 	}
-	cmd := exec.Command("taskkill", "/F", "/T", "/PID", strconv.Itoa(pid))
-	if err = cmd.Run(); err != nil {
-		fmt.Println("Error:", err.Error())
-		return
+
+	killNow := func() {
+		time.Sleep(duration)
+		cmd := exec.Command("taskkill", "/F", "/T", "/PID", strconv.Itoa(pid))
+		if err = cmd.Run(); err != nil {
+			fmt.Println("Error:", err.Error())
+			return
+		}
+		fmt.Printf("%v has been kiled\n", processName)
 	}
-	fmt.Printf("%v has been kiled\n", processName)
+	go killNow()
 }
 
 func RunKill() {
@@ -79,17 +91,13 @@ func RunKill() {
 		fmt.Println("Error :", err.Error())
 		return
 	}
-	fmt.Print("The app will be terminated in (s): ")
-	_, err = fmt.Scanf("%s\n", &durationStr)
-	if err != nil {
-		fmt.Println("Error :", err.Error())
-		return
-	}
 	//pid, err := getProcessID(processName)
 	//if err != nil {
 	//	fmt.Println("Error:", err)
 	//} else {
 	//	fmt.Println("Process ID: ", pid)
 	//}
-	kill(processName, durationStr)
+	//parse
+	duration := GetSleepDuration(durationStr)
+	kill(processName, duration)
 }
