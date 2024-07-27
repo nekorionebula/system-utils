@@ -26,7 +26,7 @@ func Input() {
 		}
 		switch input {
 		case "1":
-			kill.RunKill()
+			kill.Kill()	
 		case "2":
 			kill.Shutdown()
 		default:
@@ -37,8 +37,6 @@ func Input() {
 			if try != "y" {
 				fmt.Println("Exiting...")
 				return
-			} else {
-				continue
 			}
 		}
 
