@@ -5,8 +5,7 @@ import (
 	"strings"
 )
 
-func PromptUser(prompt string) bool  {
-	validResponse := "y"
+func PromptUser(prompt string, validResponse string) bool  {
 	fmt.Print(prompt)
 
 	var response string
@@ -15,9 +14,9 @@ func PromptUser(prompt string) bool  {
 }
 
 func Retry() bool {
-	return PromptUser("Try Again? (y/n): ")
+	return PromptUser("Try Again? (y/n): ", "y")
 }
 
 func Home() bool {
-	return PromptUser("Back to Home? (y/n): ")
+	return PromptUser("Back to Home? (y/n): ", "n")
 }

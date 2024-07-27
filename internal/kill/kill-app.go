@@ -2,6 +2,7 @@ package kill
 
 import (
 	"bufio"
+	"context"
 	"fmt"
 	"os/exec"
 	"strconv"
@@ -32,7 +33,7 @@ func (app *App) getSleepDuration() error {
 			return fmt.Errorf("error while scanning %w", err)
 		}
 
-		durationFl, err :=strconv.ParseFloat(durationStr, 32)
+		durationFl, err := strconv.ParseFloat(durationStr, 32)
 		if err == nil {
 			app.Duration = time.Duration(durationFl * float64(time.Second))
 			return nil
@@ -63,9 +64,7 @@ func (app *App) scanApp() error {
 	return fmt.Errorf("%s is not found", app.Name)
 }
 
-
-
-func  KillApp() {
+func KillApp(ctx context.Context) {
 	app := &App{}
 	if err := app.getName(); err != nil {
 		fmt.Println("Error: cannot get the name ", err)
@@ -83,11 +82,18 @@ func  KillApp() {
 		return
 	}
 
-	time.Sleep(app.Duration)
-	cmd := exec.Command("taskkill", "/F", "/T", "/IM", app.Name+".exe")
-	output, err := cmd.CombinedOutput()
-	if err != nil {
-		fmt.Println("runtime error:", err)
-		fmt.Println("Output:", string(output))
-	}
+	go func() {
+		select {
+		case <- time.After(app.Duration):
+			cmd := exec.Command("taskkill", "/F", "/T", "/IM", app.Name+".exe")
+			output, err := cmd.CombinedOutput()
+			if err != nil {
+				fmt.Println("runtime error:", err)
+				fmt.Println("Output:", string(output))
+			}
+			fmt.Printf("\n%s succesfully killed in %.2f minutes\n", app.Name, app.Duration.Minutes())
+		case <- ctx.Done():
+			fmt.Println("Done")
+		}
+	}()
 }
