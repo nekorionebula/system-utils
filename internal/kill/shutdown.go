@@ -31,9 +31,9 @@ func getDuration() int{
 	return 0
 }
 
-func Shutdown() { 
+func System() { 
 	duration := getDuration()
-	if duration < 30 {
+	if duration <= 30 {
 		fmt.Println("Less than 30 seconds. Exiting...")
 		return
 	}

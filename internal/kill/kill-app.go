@@ -65,7 +65,7 @@ func (app *App) scanApp() error {
 
 
 
-func  Kill() {
+func  KillApp() {
 	app := &App{}
 	if err := app.getName(); err != nil {
 		fmt.Println("Error: cannot get the name ", err)
