@@ -10,7 +10,7 @@ This terminal-based program allows you to automatically close applications or sh
 
 ## Installation 
 <img src="docs/readme-assets/windows_logo.svg" width="100" height="75"> <br /> Latest Release 
-[Download](github.com/nekorionebula/system-utils/releases/latest/download/system-utils.exe) <br />
+[Download](https://github.com/nekorionebula/system-utils/releases/latest/download/system-utils.exe) <br />
 
 ## Usage
 Run the program from the command line and specify the application you want to close, the duration in minutes, or schedule a system shutdown
